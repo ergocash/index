@@ -50,6 +50,11 @@
     display: flex; min-height: 100vh;
   }
 
+  /* Make sure all major containers inherit Ubuntu font */
+  #mainContent, #sidebar, #content, #aboutModalContent, #figures, figure, figcaption, .stats, #backToTop, #aboutButton {
+    font-family: 'Ubuntu', Arial, sans-serif;
+  }
+
   /* Loading overlay styles */
   #loadingOverlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -105,16 +110,16 @@
     border-color: var(--primary-color);
   }
 
-  /* Category container with original spacing */
+  /* Categories container hidden for now */
   #categoriesContainer {
-    display: flex;
+    display: none; /* Hidden instead of visible */
     flex-direction: column;
-    gap: 10px; /* same as your initial code */
+    gap: 10px;
     width: 100%;
     margin-top: 20px;
   }
 
-  /* Category buttons styling */
+  /* Category buttons styling (won't be visible) */
   .category-btn {
     padding: 10px;
     width: 100%;
@@ -150,9 +155,7 @@
   }
 }
 
-  /* Remove site title from top for cleaner look */
-
-  /* Figures grid styles */
+/* Figures grid styles */
 #figures {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
 }
@@ -173,7 +176,8 @@ figure img:hover {
   transform: scale(1.05);
 }
 figcaption {
-  font-family: 'Pacifico', cursive; font-size: 1.1em; margin-top: 8px; color: var(--caption-color);
+  font-family: 'Ubuntu', Arial, sans-serif; /* Changed to Ubuntu */
+  font-size: 1.1em; margin-top: 8px; color: var(--caption-color);
   text-align: center;
 }
 .stats {
@@ -286,8 +290,8 @@ figcaption {
   <button id="aboutButton">About</button>
   <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
-  <!-- Categories with original spacing -->
-  <div id="categoriesContainer">
+  <!-- Categories with hidden display -->
+  <div id="categoriesContainer" style="display: none;">
     <button class="category-btn" data-filter="All"><span>All</span></button>
     <button class="category-btn" data-filter="Water and Hygiene"><span>Water & Hygiene</span></button>
     <button class="category-btn" data-filter="Hunger"><span>Hunger</span></button>
@@ -299,7 +303,7 @@ figcaption {
 
 <!-- Main Content -->
 <div id="content">
-  <!-- No site title, only the logo -->
+  <!-- No site title from here, only the logo -->
   <!-- Optional: add a header or leave blank -->
   <h1 id="main-title" style="display:none;">ERGO INDEX</h1>
   <div id="figures"></div>
@@ -311,7 +315,6 @@ figcaption {
 <!-- About Modal -->
 <div id="aboutModal">
   <div id="aboutModalContent">
-    <h2>About</h2>
     <p>
       Discover the ERGO ecosystem within our unbiased, fast and free indexer!
     </p>
