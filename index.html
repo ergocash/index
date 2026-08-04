@@ -60,7 +60,7 @@
     width: 100%; height: 100%;
   }
 
-  /* Sidebar styles: flex column, full height, with bottom positioned button */
+  /* Sidebar styles: flex column, full height, with About at top */
   #sidebar {
     position: fixed; top: 0; left: 0; height: 100%;
     background: var(--figure-bg);
@@ -275,8 +275,10 @@ figcaption {
 <!-- Light/Dark Mode Toggle -->
 <button id="mode-toggle" title="Toggle Light/Dark Mode">🌙</button>
 
-<!-- Sidebar: flex column, full height, with About at bottom -->
+<!-- Sidebar: flex column, full height, with About at top -->
 <div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
+  <!-- About Button placed above search -->
+  <button id="aboutButton">About</button>
   <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
   <!-- Categories with hidden display -->
@@ -290,8 +292,6 @@ figcaption {
   </div>
   <!-- Spacer to push About button to bottom -->
   <div style="flex-grow: 1;"></div>
-  <!-- About Button placed at bottom -->
-  <button id="aboutButton" style="margin-top: auto;">About</button>
 </div>
 
 <!-- Main Content -->
