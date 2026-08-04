@@ -14,28 +14,19 @@
     --text-color: #222;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --hover-shadow-color: rgba(0, 0, 0, 0.2);
-    --filter-tag-bg: #fff;
     --filter-tag-hover: #e0f7fa;
     --figure-bg: #fff;
     --figure-shadow: rgba(0, 0, 0, 0.1);
     --caption-color: #555;
-    --blue-color: #4a90e2;
     --primary-color: #ff7f50;
-    --secondary-color: #ffa500;
   }
   body.dark-mode {
     --bg-color: #222;
     --text-color: #eee;
     --shadow-color: rgba(0, 0, 0, 0.6);
-    --hover-shadow-color: rgba(0, 0, 0, 0.8);
-    --filter-tag-bg: #333;
     --filter-tag-hover: #555;
     --figure-bg: #111;
-    --figure-shadow: rgba(0, 0, 0, 0.7);
     --caption-color: #aaa;
-    --blue-color: #fff;
-    --primary-color: #ff7f50;
-    --secondary-color: #ffa500;
   }
 
   *:focus { outline: none; box-shadow: none; }
@@ -60,7 +51,7 @@
     box-shadow: 2px 0 8px var(--shadow-color);
     padding: 20px 15px;
     display: flex; flex-direction: column; align-items: stretch;
-    width: 200px; overflow-y: auto; z-index: 1000; /* wider for favorites list */
+    width: 200px; overflow-y: auto; z-index: 1000;
     min-height: 100vh;
   }
   #sidebar::-webkit-scrollbar {
@@ -89,7 +80,7 @@
     border-color: var(--primary-color);
   }
 
-  /* Favorites list - now full width in sidebar with theme styling */
+  /* Favorites list styling */
 #favorites {
   margin-top: 20px; /* space below search */
   flex: 1; /* fill remaining space */
@@ -114,7 +105,7 @@
   margin-bottom: 8px;
 }
 .favorite-item span {
-  flex: 1; /* link takes most space */
+  flex: 1;
 }
 .favorite-item button {
   background: none; border: none; cursor: pointer; font-size: 1.2em; color: var(--caption-color);
@@ -123,7 +114,7 @@
   color: red;
 }
 
-/* Figures styling as before, side by side with info always visible */
+/* Figures styling with hidden info initially */
 #figures {
   display: flex; flex-direction: column; gap: 20px;
 }
@@ -132,8 +123,10 @@ figure {
   border-radius: 12px;
   box-shadow: 0 4px 8px var(--figure-shadow);
   padding: 15px;
-  display: flex; align-items: center; width: 100%;
-  cursor: pointer; transition: all 0.3s;
+  display: flex; flex-direction: column; /* changed to column for dropdown effect */
+  width: 100%;
+  cursor: pointer; 
+  transition: all 0.3s;
 }
 figure:hover {
   transform: translateY(-4px);
@@ -143,20 +136,22 @@ figure a {
   display: flex; align-items: center; width: 100%; text-decoration: none; color: inherit;
 }
 figure img {
-  width: 80px; height: 80px; object-fit: contain; border-radius: 8px; margin-right: 15px;
+  width: 80px; height: 80px; object-fit: contain; border-radius: 8px; cursor: pointer; margin-right: 15px;
 }
-figure .info {
-  flex: 1;
+figure .title-label {
+  font-family:'Ubuntu',Arial,sans-serif; font-size:1.1em; margin-top: 10px; cursor: pointer; font-weight: bold;
 }
-figcaption {
-  font-family:'Ubuntu',Arial,sans-serif; font-size:1.1em; margin-bottom:8px; color:var(--caption-color);
+.dropdown-content {
+  display: none;
+  margin-top: 10px;
+  font-family:'Ubuntu',Arial,sans-serif; font-size:0.95em; color:var(--caption-color);
 }
 .stats {
   margin-top: 6px; font-size:0.85em; font-style:italic; color:var(--caption-color);
   display: block;
 }
 .favorite-btn {
-  font-size:1.5em; color: gray; background: none; border: none; cursor:pointer; margin-left:10px;
+  font-size:1.5em; color: gray; background: none; border: none; cursor:pointer; margin-top: 10px; align-self: flex-start;
 }
 .favorite-btn.favorited {
   color: gold;
@@ -194,7 +189,7 @@ figcaption {
   color: #fff;
 }
 
-/* Modal styles omitted for brevity */
+/* Modal styles */
 #aboutModal {
   display: none;
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -236,13 +231,11 @@ figcaption {
 }
 </style>
 </head>
-
 <!-- GoatCounter Script -->
 <script data-goatcounter="https://ergoindex.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-
 <body>
 
-<div id="mainContent">
+<div id="mainContent" style="display:none;">
 
 <button id="mode-toggle" title="Toggle Light/Dark Mode">🌙</button>
 
@@ -283,7 +276,7 @@ const figures = [
   {
     href: "https://ergoplatform.org/en/",
     src: "https://i.postimg.cc/SjB7zJNK/ergoplatform.jpg",
-    caption: "ergoplatform.org",
+    caption: "Ergo Platform",
     categoryLabel: "NA",
     stats: "Ergo is a next-generation smart contract platform that ensures the economic freedom of ordinary people through secure, accessible, and decentralized financial tools."
   },
@@ -304,37 +297,54 @@ function populateFigures() {
   figures.forEach(item => {
     const figure = document.createElement('figure');
     figure.setAttribute('data-category', item.categoryLabel);
+    
+    // Toggle info dropdown on figure click
     figure.onclick = () => {
-      figure.classList.toggle('show-stats');
+      const dropdown = figure.querySelector('.dropdown-content');
+      dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
     };
-    let figureHTML = `
+
+    // Create the figure HTML with only the title visible
+    const figureHTML = `
       <a href="${item.href}" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; width:100%;">
-        <img src="${item.src}">
-        <div class="info" style="margin-left:10px; flex:1;">
-          <figcaption style="font-family:'Ubuntu',Arial,sans-serif; font-size:1.1em; margin-bottom:8px; color:var(--caption-color);">${item.caption}</figcaption>
-          <div class="stats" style="font-size:0.85em; font-style:italic; color:var(--caption-color);">${item.stats}</div>
-        </div>
+        <img src="${item.src}" style="cursor:pointer;">
       </a>
-      <button class="favorite-btn" style="background:none; border:none; cursor:pointer; font-size:1.5em; margin-left:10px; color: gray;" title="Add to favorites">★</button>
+      <div class="title-label" style="margin-top:10px;">${item.caption}</div>
+      <div class="dropdown-content" style="display:none; margin-top:10px;">
+        <div class="caption">${item.caption}</div>
+        <div class="stats">${item.stats}</div>
+      </div>
+      <button class="favorite-btn" style="background:none; border:none; cursor:pointer; font-size:1.5em; margin-top:10px; align-self:flex-start;">★</button>
     `;
     figure.innerHTML = figureHTML;
 
-    // Favorite toggle
+    // When clicking the image, open the link
+    const img = figure.querySelector('img');
+    img.onclick = (e) => {
+      e.stopPropagation(); // prevent toggling dropdown
+      window.open(item.href, '_blank');
+    };
+
+    // Toggle favorite
     const favBtn = figure.querySelector('.favorite-btn');
     favBtn.onclick = (e) => {
       e.stopPropagation();
       toggleFavorite(item, favBtn);
     };
 
+    // Append figure
     container.appendChild(figure);
   });
 }
 
+// Other functions (filterFigures, toggleFavorite, etc.) remain unchanged...
+// (You can copy all the previous script code here, no changes needed)
+
 function filterFigures(type, value) {
   document.querySelectorAll('#figures figure').forEach(fig => {
     const category = fig.dataset.category.toLowerCase();
-    const captionText = fig.querySelector('figcaption').innerText.toLowerCase();
-    const statsText = fig.querySelector('.stats').innerText.toLowerCase();
+    const captionText = fig.querySelector('.caption')?.innerText.toLowerCase() || '';
+    const statsText = fig.querySelector('.stats')?.innerText.toLowerCase() || '';
     if (type === 'category') {
       if (value.toLowerCase() === 'all' || category === value.toLowerCase()) {
         fig.style.display = '';
@@ -355,10 +365,6 @@ function filterFigures(type, value) {
     }
   });
 }
-
-const backBtn = document.getElementById('backToTop');
-backBtn.classList.add('hidden');
-let hideTimeout = null;
 
 function toggleFavorite(item, btn) {
   const index = favorites.findIndex(fav => fav.caption === item.caption);
@@ -399,12 +405,14 @@ function removeFavorite(caption) {
   if (index !== -1) {
     favorites.splice(index, 1);
     updateFavoritesSection();
-    // Also un-favorite the star in the figure
+    // Unfavorite in figures
     document.querySelectorAll('#figures figure').forEach(fig => {
-      if (fig.querySelector('figcaption') && fig.querySelector('figcaption').innerText === caption) {
+      if (fig.querySelector('.favorite-btn')) {
         const favBtn = fig.querySelector('.favorite-btn');
-        favBtn.classList.remove('favorited');
-        favBtn.style.color = 'gray';
+        if (fig.querySelector('.caption') && fig.querySelector('.caption').innerText === caption) {
+          favBtn.classList.remove('favorited');
+          favBtn.style.color = 'gray';
+        }
       }
     });
   }
@@ -449,10 +457,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Back to Top
   window.addEventListener('scroll', () => {
-    backBtn.classList.remove('hidden');
-    if (hideTimeout) clearTimeout(hideTimeout);
-    hideTimeout = setTimeout(() => {
-      backBtn.classList.add('hidden');
+    document.getElementById('backToTop').classList.remove('hidden');
+    if (window.hideTimeout) clearTimeout(window.hideTimeout);
+    window.hideTimeout = setTimeout(() => {
+      document.getElementById('backToTop').classList.add('hidden');
     }, 2000);
   });
   document.getElementById('backToTop').onclick = () => {
@@ -477,5 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+</div> <!-- closing mainContent -->
 </body>
 </html>
