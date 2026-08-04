@@ -49,25 +49,18 @@
     display: flex; min-height: 100vh;
   }
 
-  /* Make sure all major containers inherit Ubuntu font */
-  #mainContent, #sidebar, #content, #aboutModalContent, #figures, figure, figcaption, .stats, #backToTop, #aboutButton {
-    font-family: 'Ubuntu', Arial, sans-serif;
-  }
-
-  /* Hidden main content initially - now always visible after load */
   #mainContent {
-    display: none; /* Hidden initially, will be shown after DOM loads */
+    display: block;
     width: 100%; height: 100%;
   }
 
-  /* Sidebar styles: flex column, full height, with About at top */
   #sidebar {
     position: fixed; top: 0; left: 0; height: 100%;
     background: var(--figure-bg);
     box-shadow: 2px 0 8px var(--shadow-color);
     padding: 20px 15px;
-    display: flex; flex-direction: column; align-items: center; /* Center items horizontally */
-    width: 160px; overflow-y: auto; z-index: 1000;
+    display: flex; flex-direction: column; align-items: stretch;
+    width: 200px; overflow-y: auto; z-index: 1000; /* wider for favorites list */
     min-height: 100vh;
   }
   #sidebar::-webkit-scrollbar {
@@ -78,107 +71,98 @@
     border-radius: 3px;
   }
 
-  /* Light/Dark Mode Toggle Button */
   #mode-toggle {
     position: fixed; top: 15px; right: 15px; font-size: 1.5em;
     background: transparent; border: none; cursor: pointer; z-index: 1100;
     color: var(--text-color);
-    transition: transform 0.2s;
   }
   #mode-toggle:hover {
     transform: scale(1.2);
   }
 
-  /* Search input styles */
   #sidebar input[type="search"] {
     margin-top: 15px; width: 100%; padding: 10px 15px; border-radius: 20px;
-    border: 1px solid #555; font-family: 'Ubuntu'; font-size: 14px; background: transparent; color: var(--text-color); transition: box-shadow 0.3s, border-color 0.3s;
+    border: 1px solid #555; font-family: 'Ubuntu'; font-size: 14px; background: transparent; color: var(--text-color);
   }
   #sidebar input[type="search"]:focus {
     box-shadow: 0 0 8px var(--primary-color);
     border-color: var(--primary-color);
   }
 
-  /* Categories container hidden for now */
-  #categoriesContainer {
-    display: none; /* Hidden */
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    margin-top: 20px;
-  }
-
-  /* Category buttons styling (won't be visible) */
-  .category-btn {
-    padding: 10px;
-    width: 100%;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: #fff;
-    font-family: 'Ubuntu';
-    font-weight: bold;
-    font-size: 0.9em;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s;
-  }
-  .category-btn:hover {
-    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
-  }
-
-  /* Main content styles */
-#content {
-    margin-left: 160px; padding: 30px 20px; flex: 1;
-    transition: margin-left 0.3s;
+  /* Favorites list - now full width in sidebar with theme styling */
+#favorites {
+  margin-top: 20px; /* space below search */
+  flex: 1; /* fill remaining space */
+  display: flex; flex-direction: column; overflow-y: auto; /* scroll if needed */
 }
-@media (max-width: 768px) {
-  #sidebar {
-    width: 140px;
-    padding: 15px 10px;
-  }
-  #content {
-    margin-left: 140px;
-  }
+#favorites h3 {
+  font-family: 'Ubuntu'; font-size: 1.2em; margin-bottom: 10px;
+}
+#favorites a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-family: 'Ubuntu'; font-size: 0.95em;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+#favorites a:hover {
+  background: var(--filter-tag-hover);
+}
+.favorite-item {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.favorite-item span {
+  flex: 1; /* link takes most space */
+}
+.favorite-item button {
+  background: none; border: none; cursor: pointer; font-size: 1.2em; color: var(--caption-color);
+}
+.favorite-item button:hover {
+  color: red;
 }
 
-/* Figures grid styles */
+/* Figures styling as before, side by side with info always visible */
 #figures {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+  display: flex; flex-direction: column; gap: 20px;
 }
 figure {
-  background: var(--figure-bg); border-radius: 12px; box-shadow: 0 4px 8px var(--figure-shadow);
-  padding: 15px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.3s;
-  position: relative;
+  background: var(--figure-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px var(--figure-shadow);
+  padding: 15px;
+  display: flex; align-items: center; width: 100%;
+  cursor: pointer; transition: all 0.3s;
 }
 figure:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 20px rgba(0,0,0,0.4);
 }
-figure a { display: flex; flex-direction: column; align-items: center; }
-figure img {
-  width: 80px; height: 80px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; transition: transform 0.3s;
+figure a {
+  display: flex; align-items: center; width: 100%; text-decoration: none; color: inherit;
 }
-figure img:hover {
-  transform: scale(1.05);
+figure img {
+  width: 80px; height: 80px; object-fit: contain; border-radius: 8px; margin-right: 15px;
+}
+figure .info {
+  flex: 1;
 }
 figcaption {
-  font-family: 'Ubuntu', Arial, sans-serif; /* Explicit Ubuntu font for titles */
-  font-size: 1.1em; margin-top: 8px; color: var(--caption-color);
-  text-align: center;
+  font-family:'Ubuntu',Arial,sans-serif; font-size:1.1em; margin-bottom:8px; color:var(--caption-color);
 }
 .stats {
-  margin-top: 6px; font-size: 0.85em; font-style: italic; color: var(--caption-color);
-  display: none;
-  cursor: pointer;
-}
-.show-stats .stats {
+  margin-top: 6px; font-size:0.85em; font-style:italic; color:var(--caption-color);
   display: block;
 }
+.favorite-btn {
+  font-size:1.5em; color: gray; background: none; border: none; cursor:pointer; margin-left:10px;
+}
+.favorite-btn.favorited {
+  color: gold;
+}
 
-/* Larger, more visible Back to Top button */
+/* Back to Top button styles */
 #backToTop {
   position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
   background: var(--primary-color); color: #fff; border: none; border-radius: 50%;
@@ -190,11 +174,11 @@ figcaption {
   opacity: 0; pointer-events: none;
 }
 #backToTop:hover {
-  background: #ffa500; /* Bright orange hover */
+  background: #ffa500;
   transform: scale(1.1);
 }
 
-/* About Button styling */
+/* About button styling */
 #aboutButton {
   margin-bottom: 10px;
   padding: 8px 12px;
@@ -204,15 +188,13 @@ figcaption {
   font-family: 'Ubuntu', sans-serif;
   font-size: 0.9em;
   color: var(--primary-color);
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
 }
 #aboutButton:hover {
   background-color: var(--primary-color);
   color: #fff;
 }
 
-/* Modal styles */
+/* Modal styles omitted for brevity */
 #aboutModal {
   display: none;
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -226,7 +208,7 @@ figcaption {
   max-width: 600px;
   width: 90%;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-family: 'Ubuntu', Arial, sans-serif;
+  font-family: 'Ubuntu',Arial,sans-serif;
   color: var(--text-color);
   text-align: center;
 }
@@ -237,20 +219,11 @@ figcaption {
   margin-bottom: 10px;
   color: var(--primary-color);
 }
-/* Logo as circular image */
 #aboutModalContent img {
   max-width: 200px;
   display: block;
   margin: 0 auto 15px auto;
-  border-radius: 50%; /* Make it circular */
-}
-#aboutModalContent p {
-  line-height: 1.5;
-  font-size: 1em;
-}
-#aboutModalContent a {
-  color: var(--primary-color);
-  text-decoration: underline;
+  border-radius: 50%;
 }
 #closeAbout {
   margin-top: 15px;
@@ -269,19 +242,13 @@ figcaption {
 
 <body>
 
-<!-- Main content -->
 <div id="mainContent">
 
-<!-- Light/Dark Mode Toggle -->
 <button id="mode-toggle" title="Toggle Light/Dark Mode">🌙</button>
 
-<!-- Sidebar: flex column, full height, with About at top -->
 <div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
-  <!-- About Button placed above search -->
   <button id="aboutButton">About</button>
-  <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
-  <!-- Categories with hidden display -->
   <div id="categoriesContainer" style="display: none;">
     <button class="category-btn" data-filter="All"><span>All</span></button>
     <button class="category-btn" data-filter="Water and Hygiene"><span>Water & Hygiene</span></button>
@@ -290,32 +257,26 @@ figcaption {
     <button class="category-btn" data-filter="Environment"><span>Environment</span></button>
     <button class="category-btn" data-filter="Animals"><span>Animals</span></button>
   </div>
-  <!-- Spacer to push About button to bottom -->
-  <div style="flex-grow: 1;"></div>
+  <h3 style="margin-top:20px; font-family:'Ubuntu'; font-size:1.2em;">Favorites</h3>
+  <div id="favorites" style="margin-top:10px; flex:1; overflow:auto;">
+    <p style="font-family:'Ubuntu'; font-size:0.9em;">No favorites yet.</p>
+  </div>
 </div>
 
-<!-- Main Content -->
-<div id="content">
+<div id="content" style="margin-left:200px; padding:30px;">
   <h1 id="main-title" style="display:none;">ERGO INDEX</h1>
   <div id="figures"></div>
 </div>
 
-<!-- Back to Top -->
 <div id="backToTop">↑</div>
 
-<!-- About Modal -->
 <div id="aboutModal">
   <div id="aboutModalContent">
-    <!-- ERGO Logo as circular image -->
     <img src="https://i.postimg.cc/zL1QDNxs/ergoindex.jpg" alt="ERGO Logo" />
-    <p>
-      Discover the ERGO ecosystem with our fast and free indexer!
-    </p>
+    <p>Discover the ERGO ecosystem with our fast and free indexer!</p>
     <button id="closeAbout">Close</button>
   </div>
 </div>
-
-</div> <!-- end mainContent -->
 
 <script>
 const figures = [
@@ -327,6 +288,8 @@ const figures = [
     stats: "Ergo is a next-generation smart contract platform that ensures the economic freedom of ordinary people through secure, accessible, and decentralized financial tools."
   },
 ];
+
+const favorites = [];
 
 function shuffleArray(array) {
   for (let i=array.length-1; i>0; i--) {
@@ -345,17 +308,24 @@ function populateFigures() {
       figure.classList.toggle('show-stats');
     };
     let figureHTML = `
-      <a href="${item.href}" target="_blank" rel="noopener noreferrer">
+      <a href="${item.href}" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; width:100%;">
         <img src="${item.src}">
-      </a>
-      <div class="fig-details">
-        <div class="fig-text">
-          <figcaption>${item.caption}</figcaption>
-          <div class="stats">${item.stats}</div>
+        <div class="info" style="margin-left:10px; flex:1;">
+          <figcaption style="font-family:'Ubuntu',Arial,sans-serif; font-size:1.1em; margin-bottom:8px; color:var(--caption-color);">${item.caption}</figcaption>
+          <div class="stats" style="font-size:0.85em; font-style:italic; color:var(--caption-color);">${item.stats}</div>
         </div>
-      </div>
+      </a>
+      <button class="favorite-btn" style="background:none; border:none; cursor:pointer; font-size:1.5em; margin-left:10px; color: gray;" title="Add to favorites">★</button>
     `;
     figure.innerHTML = figureHTML;
+
+    // Favorite toggle
+    const favBtn = figure.querySelector('.favorite-btn');
+    favBtn.onclick = (e) => {
+      e.stopPropagation();
+      toggleFavorite(item, favBtn);
+    };
+
     container.appendChild(figure);
   });
 }
@@ -390,8 +360,57 @@ const backBtn = document.getElementById('backToTop');
 backBtn.classList.add('hidden');
 let hideTimeout = null;
 
+function toggleFavorite(item, btn) {
+  const index = favorites.findIndex(fav => fav.caption === item.caption);
+  if (index === -1) {
+    favorites.push(item);
+    btn.classList.add('favorited');
+    btn.style.color = 'gold';
+  } else {
+    favorites.splice(index, 1);
+    btn.classList.remove('favorited');
+    btn.style.color = 'gray';
+  }
+  updateFavoritesSection();
+}
+
+function updateFavoritesSection() {
+  const favContainer = document.getElementById('favorites');
+  favContainer.innerHTML = '';
+  if (favorites.length === 0) {
+    favContainer.innerHTML = '<p style="font-family:\'Ubuntu\'; font-size:0.9em;">No favorites yet.</p>';
+    return;
+  }
+  favorites.forEach(item => {
+    const favItem = document.createElement('div');
+    favItem.className = 'favorite-item';
+    favItem.innerHTML = `
+      <a href="${item.href}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:var(--text-color);">
+        ${item.caption}
+      </a>
+      <button style="background:none; border:none; cursor:pointer; font-size:1.2em; margin-left:8px;" title="Remove from favorites" onclick="removeFavorite('${item.caption}')">✖</button>
+    `;
+    favContainer.appendChild(favItem);
+  });
+}
+
+function removeFavorite(caption) {
+  const index = favorites.findIndex(fav => fav.caption === caption);
+  if (index !== -1) {
+    favorites.splice(index, 1);
+    updateFavoritesSection();
+    // Also un-favorite the star in the figure
+    document.querySelectorAll('#figures figure').forEach(fig => {
+      if (fig.querySelector('figcaption') && fig.querySelector('figcaption').innerText === caption) {
+        const favBtn = fig.querySelector('.favorite-btn');
+        favBtn.classList.remove('favorited');
+        favBtn.style.color = 'gray';
+      }
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Show main content after styles are applied
   document.getElementById('mainContent').style.display = 'block';
 
   const modeToggle = document.getElementById('mode-toggle');
@@ -399,7 +418,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('dark-mode');
   document.getElementById('mode-toggle').innerHTML = '🌙';
 
-  // Theme toggle
   modeToggle.onclick = () => {
     document.body.classList.toggle('dark-mode');
     if (document.body.classList.contains('dark-mode')) {
@@ -429,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.onclick = () => { filterFigures('category', btn.dataset.filter); };
   });
 
-  // Back to Top button visibility
+  // Back to Top
   window.addEventListener('scroll', () => {
     backBtn.classList.remove('hidden');
     if (hideTimeout) clearTimeout(hideTimeout);
@@ -441,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // About Button modal
+  // About modal
   const aboutBtn = document.getElementById('aboutButton');
   const aboutModal = document.getElementById('aboutModal');
   const closeBtn = document.getElementById('closeAbout');
