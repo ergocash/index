@@ -20,11 +20,10 @@
     --figure-shadow: rgba(0, 0, 0, 0.1);
     --caption-color: #555;
     --blue-color: #4a90e2;
-    --primary-color: #ff7f50; /* Orange accents for theme highlights */
-    --secondary-color: #ffa500; /* Lighter orange for accents */
+    --primary-color: #ff7f50;
+    --secondary-color: #ffa500;
   }
   body.dark-mode {
-    /* Dark theme override colors */
     --bg-color: #222;
     --text-color: #eee;
     --shadow-color: rgba(0, 0, 0, 0.6);
@@ -55,31 +54,21 @@
     font-family: 'Ubuntu', Arial, sans-serif;
   }
 
-  /* Loading overlay styles */
-  #loadingOverlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #fff; display: flex; align-items: center; justify-content: center;
-    z-index: 9999; flex-direction: column;
-  }
-  #loadingOverlay img {
-    max-width: 200px;
-  }
-  /* Hidden main content initially */
+  /* Hidden main content initially - now always visible */
   #mainContent {
-    display: none;
+    display: block;
     width: 100%; height: 100%;
   }
 
-  /* Sidebar styles */
+  /* Sidebar styles: flex column, full height, with bottom positioned button */
   #sidebar {
     position: fixed; top: 0; left: 0; height: 100%;
     background: var(--figure-bg);
     box-shadow: 2px 0 8px var(--shadow-color);
     padding: 20px 15px;
-    display: flex; flex-direction: column; align-items: center;
+    display: flex; flex-direction: column; align-items: center; /* Center items horizontally */
     width: 160px; overflow-y: auto; z-index: 1000;
     min-height: 100vh;
-    justify-content: flex-start;
   }
   #sidebar::-webkit-scrollbar {
     width: 6px;
@@ -112,7 +101,7 @@
 
   /* Categories container hidden for now */
   #categoriesContainer {
-    display: none; /* Hidden instead of visible */
+    display: none; /* Hidden */
     flex-direction: column;
     gap: 10px;
     width: 100%;
@@ -176,7 +165,7 @@ figure img:hover {
   transform: scale(1.05);
 }
 figcaption {
-  font-family: 'Ubuntu', Arial, sans-serif; /* Changed to Ubuntu */
+  font-family: 'Ubuntu', Arial, sans-serif; /* Explicit Ubuntu font for titles */
   font-size: 1.1em; margin-top: 8px; color: var(--caption-color);
   text-align: center;
 }
@@ -239,6 +228,7 @@ figcaption {
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   font-family: 'Ubuntu', Arial, sans-serif;
   color: var(--text-color);
+  text-align: center;
 }
 #aboutModalContent h2 {
   margin-top: 0;
@@ -246,6 +236,13 @@ figcaption {
   font-size: 2em;
   margin-bottom: 10px;
   color: var(--primary-color);
+}
+/* Logo as circular image */
+#aboutModalContent img {
+  max-width: 200px;
+  display: block;
+  margin: 0 auto 15px auto;
+  border-radius: 50%; /* Make it circular */
 }
 #aboutModalContent p {
   line-height: 1.5;
@@ -272,22 +269,14 @@ figcaption {
 
 <body>
 
-<!-- Loading overlay with logo -->
-<div id="loadingOverlay">
-  <img src="https://i.postimg.cc/zL1QDNxs/ergoindex.jpg" alt="ERGO Logo" />
-</div>
-
-<!-- Main content hidden initially -->
+<!-- Main content -->
 <div id="mainContent">
 
 <!-- Light/Dark Mode Toggle -->
 <button id="mode-toggle" title="Toggle Light/Dark Mode">🌙</button>
 
-<!-- Sidebar -->
-<div id="sidebar">
-  <!-- Removed logo from sidebar -->
-  <!-- About Button -->
-  <button id="aboutButton">About</button>
+<!-- Sidebar: flex column, full height, with About at bottom -->
+<div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
   <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
   <!-- Categories with hidden display -->
@@ -299,12 +288,14 @@ figcaption {
     <button class="category-btn" data-filter="Environment"><span>Environment</span></button>
     <button class="category-btn" data-filter="Animals"><span>Animals</span></button>
   </div>
+  <!-- Spacer to push About button to bottom -->
+  <div style="flex-grow: 1;"></div>
+  <!-- About Button placed at bottom -->
+  <button id="aboutButton" style="margin-top: auto;">About</button>
 </div>
 
 <!-- Main Content -->
 <div id="content">
-  <!-- No site title from here, only the logo -->
-  <!-- Optional: add a header or leave blank -->
   <h1 id="main-title" style="display:none;">ERGO INDEX</h1>
   <div id="figures"></div>
 </div>
@@ -315,6 +306,8 @@ figcaption {
 <!-- About Modal -->
 <div id="aboutModal">
   <div id="aboutModalContent">
+    <!-- ERGO Logo as circular image -->
+    <img src="https://i.postimg.cc/zL1QDNxs/ergoindex.jpg" alt="ERGO Logo" />
     <p>
       Discover the ERGO ecosystem within our unbiased, fast and free indexer!
     </p>
@@ -483,11 +476,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Hide loading overlay after 2 seconds
-  setTimeout(() => {
-    document.getElementById('loadingOverlay').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-  }, 2000);
+  // Removed loading overlay timeout
+  // setTimeout(() => {
+  //   document.getElementById('loadingOverlay').style.display = 'none';
+  //   document.getElementById('mainContent').style.display = 'block';
+  // }, 2000);
 });
 </script>
 </body>
