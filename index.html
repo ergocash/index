@@ -275,8 +275,10 @@ figcaption {
 <!-- Light/Dark Mode Toggle -->
 <button id="mode-toggle" title="Toggle Light/Dark Mode">🌙</button>
 
-<!-- Sidebar: flex column, full height, with About at bottom -->
+<!-- Sidebar: flex column, full height, with About at top -->
 <div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
+  <!-- About Button now at the top -->
+  <button id="aboutButton">About</button>
   <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
   <!-- Categories with hidden display -->
@@ -288,10 +290,6 @@ figcaption {
     <button class="category-btn" data-filter="Environment"><span>Environment</span></button>
     <button class="category-btn" data-filter="Animals"><span>Animals</span></button>
   </div>
-  <!-- Spacer to push About button to bottom -->
-  <div style="flex-grow: 1;"></div>
-  <!-- About Button placed at bottom -->
-  <button id="aboutButton" style="margin-top: auto;">About</button>
 </div>
 
 <!-- Main Content -->
