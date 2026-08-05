@@ -49,24 +49,21 @@
     display: flex; min-height: 100vh;
   }
 
-  /* Make sure all major containers inherit Ubuntu font */
   #mainContent, #sidebar, #content, #aboutModalContent, #figures, figure, figcaption, .stats, #backToTop, #aboutButton {
     font-family: 'Ubuntu', Arial, sans-serif;
   }
 
-  /* Hidden main content initially - now always visible after load */
   #mainContent {
     display: none; /* Hidden initially, will be shown after DOM loads */
     width: 100%; height: 100%;
   }
 
-  /* Sidebar styles: flex column, full height, with bottom positioned button */
   #sidebar {
     position: fixed; top: 0; left: 0; height: 100%;
     background: var(--figure-bg);
     box-shadow: 2px 0 8px var(--shadow-color);
     padding: 20px 15px;
-    display: flex; flex-direction: column; align-items: center; /* Center items horizontally */
+    display: flex; flex-direction: column; align-items: center;
     width: 160px; overflow-y: auto; z-index: 1000;
     min-height: 100vh;
   }
@@ -78,7 +75,6 @@
     border-radius: 3px;
   }
 
-  /* Light/Dark Mode Toggle Button */
   #mode-toggle {
     position: fixed; top: 15px; right: 15px; font-size: 1.5em;
     background: transparent; border: none; cursor: pointer; z-index: 1100;
@@ -89,7 +85,6 @@
     transform: scale(1.2);
   }
 
-  /* Search input styles */
   #sidebar input[type="search"] {
     margin-top: 15px; width: 100%; padding: 10px 15px; border-radius: 20px;
     border: 1px solid #555; font-family: 'Ubuntu'; font-size: 14px; background: transparent; color: var(--text-color); transition: box-shadow 0.3s, border-color 0.3s;
@@ -99,7 +94,6 @@
     border-color: var(--primary-color);
   }
 
-  /* Categories container hidden for now */
   #categoriesContainer {
     display: none; /* Hidden */
     flex-direction: column;
@@ -108,7 +102,6 @@
     margin-top: 20px;
   }
 
-  /* Category buttons styling (won't be visible) */
   .category-btn {
     padding: 10px;
     width: 100%;
@@ -129,138 +122,131 @@
     transform: translateY(-2px);
   }
 
-  /* Main content styles */
-#content {
+  #content {
     margin-left: 160px; padding: 30px 20px; flex: 1;
     transition: margin-left 0.3s;
-}
-@media (max-width: 768px) {
-  #sidebar {
-    width: 140px;
-    padding: 15px 10px;
   }
-  #content {
-    margin-left: 140px;
+  @media (max-width: 768px) {
+    #sidebar {
+      width: 140px;
+      padding: 15px 10px;
+    }
+    #content {
+      margin-left: 140px;
+    }
   }
-}
 
-/* Figures grid styles */
-#figures {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
-}
-figure {
-  background: var(--figure-bg); border-radius: 12px; box-shadow: 0 4px 8px var(--figure-shadow);
-  padding: 15px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.3s;
-  position: relative;
-}
-figure:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 20px rgba(0,0,0,0.4);
-}
-figure a { display: flex; flex-direction: column; align-items: center; }
-figure img {
-  width: 80px; height: 80px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; transition: transform 0.3s;
-}
-figure img:hover {
-  transform: scale(1.05);
-}
-figcaption {
-  font-family: 'Ubuntu', Arial, sans-serif; /* Explicit Ubuntu font for titles */
-  font-size: 1.1em; margin-top: 8px; color: var(--caption-color);
-  text-align: center;
-}
-.stats {
-  margin-top: 6px; font-size: 0.85em; font-style: italic; color: var(--caption-color);
-  display: none;
-  cursor: pointer;
-}
-.show-stats .stats {
-  display: block;
-}
+  #figures {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+  }
+  figure {
+    background: var(--figure-bg); border-radius: 12px; box-shadow: 0 4px 8px var(--figure-shadow);
+    padding: 15px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.3s; position: relative;
+  }
+  figure:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.4);
+  }
+  figure a { display: flex; flex-direction: column; align-items: center; }
+  figure img {
+    width: 80px; height: 80px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; transition: transform 0.3s;
+  }
+  figure img:hover {
+    transform: scale(1.05);
+  }
+  figcaption {
+    font-family: 'Ubuntu', Arial, sans-serif;
+    font-size: 1.1em; margin-top: 8px; color: var(--caption-color);
+    text-align: center;
+  }
+  .stats {
+    margin-top: 6px; font-size: 0.85em; font-style: italic; color: var(--caption-color);
+    display: none;
+    cursor: pointer;
+  }
+  .show-stats .stats {
+    display: block;
+  }
 
-/* Larger, more visible Back to Top button */
-#backToTop {
-  position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-  background: var(--primary-color); color: #fff; border: none; border-radius: 50%;
-  font-size: 2em; font-weight: bold; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 8px var(--shadow-color);
-  cursor: pointer; transition: all 0.3s; z-index: 1200;
-}
-#backToTop.hidden {
-  opacity: 0; pointer-events: none;
-}
-#backToTop:hover {
-  background: #ffa500; /* Bright orange hover */
-  transform: scale(1.1);
-}
+  #backToTop {
+    position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+    background: var(--primary-color); color: #fff; border: none; border-radius: 50%;
+    font-size: 2em; font-weight: bold; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    cursor: pointer; transition: all 0.3s; z-index: 1200;
+  }
+  #backToTop.hidden {
+    opacity: 0; pointer-events: none;
+  }
+  #backToTop:hover {
+    background: #ffa500;
+    transform: scale(1.1);
+  }
 
-/* About Button styling */
-#aboutButton {
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  background-color: transparent;
-  border: 2px solid var(--primary-color);
-  border-radius: 6px;
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 0.9em;
-  color: var(--primary-color);
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-#aboutButton:hover {
-  background-color: var(--primary-color);
-  color: #fff;
-}
+  #aboutButton {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.9em;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  #aboutButton:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
 
-/* Modal styles */
-#aboutModal {
-  display: none;
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  align-items: center; justify-content: center; z-index: 1200;
-}
-#aboutModalContent {
-  background: var(--figure-bg);
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 600px;
-  width: 90%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-family: 'Ubuntu', Arial, sans-serif;
-  color: var(--text-color);
-  text-align: center;
-}
-#aboutModalContent h2 {
-  margin-top: 0;
-  font-family: 'Pacifico', cursive;
-  font-size: 2em;
-  margin-bottom: 10px;
-  color: var(--primary-color);
-}
-/* Logo as circular image */
-#aboutModalContent img {
-  max-width: 200px;
-  display: block;
-  margin: 0 auto 15px auto;
-  border-radius: 50%; /* Make it circular */
-}
-#aboutModalContent p {
-  line-height: 1.5;
-  font-size: 1em;
-}
-#aboutModalContent a {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
-#closeAbout {
-  margin-top: 15px;
-  padding: 8px 16px;
-  border: none;
-  background-color: var(--primary-color);
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  #aboutModal {
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center; justify-content: center; z-index: 1200;
+  }
+  #aboutModalContent {
+    background: var(--figure-bg);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-family: 'Ubuntu', Arial, sans-serif;
+    color: var(--text-color);
+    text-align: center;
+  }
+  #aboutModalContent h2 {
+    margin-top: 0;
+    font-family: 'Pacifico', cursive;
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+  }
+  #aboutModalContent img {
+    max-width: 200px;
+    display: block;
+    margin: 0 auto 15px auto;
+    border-radius: 50%;
+  }
+  #aboutModalContent p {
+    line-height: 1.5;
+    font-size: 1em;
+  }
+  #aboutModalContent a {
+    color: var(--primary-color);
+    text-decoration: underline;
+  }
+  #closeAbout {
+    margin-top: 15px;
+    padding: 8px 16px;
+    border: none;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 </style>
 </head>
 
@@ -281,6 +267,11 @@ figcaption {
   <button id="aboutButton">About</button>
   <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
+  
+  <!-- Favorites Section -->
+  <h2>Favorites</h2>
+  <div id="favoritesList"></div>
+  
   <!-- Categories with hidden display -->
   <div id="categoriesContainer" style="display: none;">
     <button class="category-btn" data-filter="All"><span>All</span></button>
@@ -304,7 +295,6 @@ figcaption {
 <!-- About Modal -->
 <div id="aboutModal">
   <div id="aboutModalContent">
-    <!-- ERGO Logo as circular image -->
     <img src="https://i.postimg.cc/zL1QDNxs/ergoindex.jpg" alt="ERGO Logo" />
     <p>
       Discover the ERGO ecosystem with our fast and free indexer!
@@ -326,6 +316,8 @@ const figures = [
   },
 ];
 
+let favorites = [];
+
 function shuffleArray(array) {
   for (let i=array.length-1; i>0; i--) {
     const j = Math.floor(Math.random() * (i+1));
@@ -333,16 +325,74 @@ function shuffleArray(array) {
   }
 }
 
+function loadFavorites() {
+  const favs = localStorage.getItem('favorites');
+  favorites = favs ? JSON.parse(favs) : [];
+}
+
+function saveFavorites() {
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+function updateFavoritesList() {
+  const favsContainer = document.getElementById('favoritesList');
+  favsContainer.innerHTML = '';
+  if (favorites.length === 0) {
+    favsContainer.innerHTML = '<p>No favorites yet.</p>';
+    return;
+  }
+  favorites.forEach(index => {
+    const item = figures[index];
+    const favItem = document.createElement('div');
+    favItem.style.display = 'flex'; 
+    favItem.style.alignItems = 'center'; 
+    favItem.style.justifyContent = 'space-between'; 
+    favItem.style.marginBottom = '8px';
+
+    favItem.innerHTML = `
+      <span style="cursor:pointer;" onclick="window.open('${item.href}', '_blank')">${item.caption}</span>
+      <button style="background:none; border:none; cursor:pointer; font-size:1.2em;" onclick="removeFavorite(${index})">🗑️</button>
+    `;
+    favsContainer.appendChild(favItem);
+  });
+}
+
+function removeFavorite(index) {
+  const favIdx = favorites.indexOf(index);
+  if (favIdx !== -1) {
+    favorites.splice(favIdx, 1);
+    saveFavorites();
+    updateFavoritesList();
+    populateFigures();
+  }
+}
+
+function toggleFavorite(index) {
+  const favIdx = favorites.indexOf(index);
+  if (favIdx === -1) {
+    favorites.push(index);
+  } else {
+    favorites.splice(favIdx, 1);
+  }
+  saveFavorites();
+  updateFavoritesList();
+  populateFigures();
+}
+
 function populateFigures() {
   const container = document.getElementById('figures');
   container.innerHTML = '';
-  figures.forEach(item => {
+  figures.forEach((item, index) => {
     const figure = document.createElement('figure');
     figure.setAttribute('data-category', item.categoryLabel);
+    figure.setAttribute('data-index', index);
     figure.onclick = () => {
       figure.classList.toggle('show-stats');
     };
+    const isFavorited = favorites.includes(index);
+    const favoriteIcon = `<button class="favorite-btn" data-index="${index}" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer; font-size:1.5em;">${isFavorited ? '💖' : '🤍'}</button>`;
     let figureHTML = `
+      ${favoriteIcon}
       <a href="${item.href}" target="_blank" rel="noopener noreferrer">
         <img src="${item.src}">
       </a>
@@ -355,6 +405,13 @@ function populateFigures() {
     `;
     figure.innerHTML = figureHTML;
     container.appendChild(figure);
+  });
+  document.querySelectorAll('.favorite-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.dataset.index);
+      toggleFavorite(index);
+    };
   });
 }
 
@@ -392,6 +449,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show main content after styles are applied
   document.getElementById('mainContent').style.display = 'block';
 
+  // Load favorites from localStorage
+  loadFavorites();
+
   const modeToggle = document.getElementById('mode-toggle');
   // Set initial theme
   document.body.classList.add('dark-mode');
@@ -410,6 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
   shuffleArray(figures);
   populateFigures();
   filterFigures('category', 'All');
+  updateFavoritesList();
 
   // Search
   document.getElementById('sidebar-search').addEventListener('input', e => {
