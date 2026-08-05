@@ -64,14 +64,19 @@
     width: 100%; height: 100%;
   }
 
+  /* Sidebar styles updated: fixed position and relative container for logo */
   #sidebar {
-    position: fixed; top: 0; left: 0; height: 100%;
+    position: fixed; /* fixed for persistent sidebar */
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 160px;
     background: var(--figure-bg);
     box-shadow: 2px 0 8px var(--shadow-color);
     padding: 20px 15px;
     display: flex; flex-direction: column; align-items: center;
-    width: 160px; overflow-y: auto; z-index: 1000;
-    min-height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
   }
   #sidebar::-webkit-scrollbar {
     width: 6px;
@@ -81,7 +86,15 @@
     border-radius: 3px;
   }
 
-  /* Side tab toggle button positioned further down on the left side */
+  /* Additional style to position the logo at the bottom of sidebar */
+  #sidebar-bottom-logo {
+    position: absolute; /* absolute within fixed sidebar */
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Side toggle button positioned further down on the left side */
   #side-toggle {
     position: fixed;
     top: 80%; /* moved further down */
@@ -147,7 +160,9 @@
   }
 
   #content {
-    margin-left: 160px; padding: 30px 20px; flex: 1;
+    margin-left: 160px; /* same as sidebar width */
+    padding: 30px 20px;
+    flex: 1;
     transition: margin-left 0.3s;
   }
   @media(max-width: 768px) {
@@ -305,7 +320,7 @@
 <button id="side-toggle" title="Toggle Light/Dark Mode">☀️</button>
 
 <!-- Sidebar -->
-<div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
+<div id="sidebar">
   <button id="aboutButton">About</button>
   <input type="search" id="sidebar-search" placeholder="Search..." />
   <h2>Favorites</h2>
@@ -317,6 +332,10 @@
     <button class="category-btn" data-filter="Homelessness"><span>Homelessness</span></button>
     <button class="category-btn" data-filter="Environment"><span>Environment</span></button>
     <button class="category-btn" data-filter="Animals"><span>Animals</span></button>
+  </div>
+  <!-- Fixed bottom logo container -->
+  <div id="sidebar-bottom-logo" style="position: absolute; bottom: 20px; width: 100%; text-align: center;">
+    <img src="https://i.postimg.cc/jWdg8V4d/anonymous.png" alt="Created by ERGO" style="max-width:50px; height:auto; border-radius:8px; cursor:pointer;">
   </div>
 </div>
 
@@ -346,7 +365,7 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 
 <script>
-  // Initialize Three.js scene for background globe
+  // Initialize Three.js globe background
   let scene, camera, renderer, sphereMesh;
 
   function initGlobe() {
@@ -383,7 +402,7 @@
 
   function animate() {
     requestAnimationFrame(animate);
-    sphereMesh.rotation.y += 0.001; // slow rotation
+    sphereMesh.rotation.y += 0.001;
     renderer.render(scene, camera);
   }
 
@@ -441,7 +460,7 @@ function updateFavoritesList() {
     favItem.style.display = 'flex'; 
     favItem.style.alignItems = 'center'; 
     favItem.style.justifyContent = 'space-between'; 
-    favItem.style.marginBottom = '4px'; // decreased spacing
+    favItem.style.marginBottom = '4px';
     favItem.style.position = 'relative';
 
     favItem.innerHTML = `
@@ -450,7 +469,6 @@ function updateFavoritesList() {
     `;
     favsContainer.appendChild(favItem);
   });
-  // Attach event listeners to favorite buttons
   document.querySelectorAll('.favorite-btn').forEach(btn => {
     btn.onclick = (e) => {
       e.stopPropagation();
@@ -473,7 +491,6 @@ function removeFavorite(index) {
 function toggleFavorite(index) {
   const favIdx = favorites.indexOf(index);
   if (favIdx === -1) {
-    // Limit to 7 favorites
     if (favorites.length >= 7) {
       alert("You can only have up to 7 favorites.");
       return;
@@ -494,7 +511,6 @@ function populateFigures() {
     const figure = document.createElement('figure');
     figure.setAttribute('data-category', item.categoryLabel);
     figure.setAttribute('data-index', index);
-    // Make each figure toggle its own stats independently
     figure.addEventListener('click', () => {
       figure.classList.toggle('show-stats');
     });
@@ -515,7 +531,6 @@ function populateFigures() {
     figure.innerHTML = figureHTML;
     container.appendChild(figure);
   });
-  // Re-attach event listeners for favorite buttons
   document.querySelectorAll('.favorite-btn').forEach(btn => {
     btn.onclick = (e) => {
       e.stopPropagation();
@@ -556,32 +571,29 @@ backBtn.classList.add('hidden');
 let hideTimeout = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // This is now empty, but kept if needed.
+  // Your existing code...
 });
 </script>
 
 <script>
 window.onload = () => {
-  // Fade in main content after resources are loaded
+  // your existing onload code...
   const mainContent = document.getElementById('mainContent');
   mainContent.style.opacity = '1';
   mainContent.style.pointerEvents = 'auto';
 
-  // Initialize theme toggle
   const sideToggle = document.getElementById('side-toggle');
   document.body.classList.add('dark-mode');
-  sideToggle.innerText = '☀️'; // initial icon for dark mode
+  sideToggle.innerText = '☀️';
 
-  // Load favorites from localStorage
   loadFavorites();
 
-  // Theme toggle button
   sideToggle.onclick = () => {
     document.body.classList.toggle('dark-mode');
     if (document.body.classList.contains('dark-mode')) {
-      sideToggle.innerText = '☀️'; // sun icon for light mode
+      sideToggle.innerText = '☀️';
     } else {
-      sideToggle.innerText = '🌙'; // moon icon for dark mode
+      sideToggle.innerText = '🌙';
     }
   };
 
@@ -590,7 +602,6 @@ window.onload = () => {
   filterFigures('category', 'All');
   updateFavoritesList();
 
-  // Search
   document.getElementById('sidebar-search').addEventListener('input', e => {
     filterFigures('search', e.target.value.toLowerCase());
   });
@@ -601,12 +612,10 @@ window.onload = () => {
     document.getElementById('sidebar-search').style.boxShadow = '';
   });
 
-  // Category buttons
   document.querySelectorAll('.category-btn').forEach(btn => {
     btn.onclick = () => { filterFigures('category', btn.dataset.filter); };
   });
 
-  // Back to Top button
   window.addEventListener('scroll', () => {
     backBtn.classList.remove('hidden');
     if (hideTimeout) clearTimeout(hideTimeout);
@@ -618,7 +627,6 @@ window.onload = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // About modal
   const aboutBtn = document.getElementById('aboutButton');
   const aboutModal = document.getElementById('aboutModal');
   const closeBtn = document.getElementById('closeAbout');
