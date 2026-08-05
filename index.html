@@ -59,7 +59,8 @@
   }
 
   #mainContent {
-    display: none; /* Hidden initially, will be shown after DOM loads */
+    opacity: 0;
+    transition: opacity 0.5s ease;
     width: 100%; height: 100%;
   }
 
@@ -298,7 +299,7 @@
 <canvas id="globeBackground"></canvas>
 
 <!-- Main content -->
-<div id="mainContent" style="display:none;"> <!-- Hidden immediately on load -->
+<div id="mainContent" style="opacity:0; pointer-events:none;"> <!-- Hidden initially with opacity -->
 
 <!-- Side toggle tab further down -->
 <button id="side-toggle" title="Toggle Light/Dark Mode">☀️</button>
@@ -440,7 +441,7 @@ function updateFavoritesList() {
     favItem.style.display = 'flex'; 
     favItem.style.alignItems = 'center'; 
     favItem.style.justifyContent = 'space-between'; 
-    favItem.style.marginBottom = '8px';
+    favItem.style.marginBottom = '4px'; // decreased spacing
     favItem.style.position = 'relative';
 
     favItem.innerHTML = `
@@ -493,9 +494,10 @@ function populateFigures() {
     const figure = document.createElement('figure');
     figure.setAttribute('data-category', item.categoryLabel);
     figure.setAttribute('data-index', index);
-    figure.onclick = () => {
+    // Make each figure toggle its own stats independently
+    figure.addEventListener('click', () => {
       figure.classList.toggle('show-stats');
-    };
+    });
     const isFavorited = favorites.includes(index);
     const favoriteIcon = `<button class="favorite-btn" aria-label="${isFavorited ? 'Remove from favorites' : 'Add to favorites'}" data-index="${index}" style="position:absolute; top:8px; right:8px; background:none; border:none; cursor:pointer; font-size:1.2em; padding:2px; transition: color 0.2s; outline:none; color: var(--primary-color);">${isFavorited ? '★' : '☆'}</button>`;
     let figureHTML = `
@@ -513,6 +515,7 @@ function populateFigures() {
     figure.innerHTML = figureHTML;
     container.appendChild(figure);
   });
+  // Re-attach event listeners for favorite buttons
   document.querySelectorAll('.favorite-btn').forEach(btn => {
     btn.onclick = (e) => {
       e.stopPropagation();
@@ -559,8 +562,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script>
 window.onload = () => {
-  // Show main content after all resources are loaded
-  document.getElementById('mainContent').style.display = 'block';
+  // Fade in main content after resources are loaded
+  const mainContent = document.getElementById('mainContent');
+  mainContent.style.opacity = '1';
+  mainContent.style.pointerEvents = 'auto';
 
   // Initialize theme toggle
   const sideToggle = document.getElementById('side-toggle');
