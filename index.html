@@ -49,10 +49,6 @@
     display: flex; min-height: 100vh;
   }
 
-  #mainContent, #sidebar, #content, #aboutModalContent, #figures, figure, figcaption, .stats, #backToTop, #aboutButton {
-    font-family: 'Ubuntu', Arial, sans-serif;
-  }
-
   #mainContent {
     display: none; /* Hidden initially, will be shown after DOM loads */
     width: 100%; height: 100%;
@@ -75,19 +71,35 @@
     border-radius: 3px;
   }
 
-  #mode-toggle {
-    position: fixed; top: 15px; right: 15px; font-size: 1.5em;
-    background: transparent; border: none; cursor: pointer; z-index: 1100;
-    color: var(--text-color);
+  /* Side tab toggle button positioned further down on the left side */
+  #side-toggle {
+    position: fixed;
+    top: 70%; /* moved further down */
+    left: 0;
+    transform: translateY(-50%);
+    background-color: #ff7f50; /* primary color */
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    z-index: 1300;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s;
   }
-  #mode-toggle:hover {
-    transform: scale(1.2);
+  #side-toggle:hover {
+    background-color: #ff6347; /* darker on hover */
   }
 
-  /* Updated search input style with increased bottom margin */
+  /* Rest of styles */
+  #mode-toggle {
+    display: none; /* hidden, as we now use side toggle tab */
+  }
+
   #sidebar input[type="search"] {
     margin-top: 15px;
-    margin-bottom: 20px; /* Increased spacing here */
+    margin-bottom: 20px; /* increased spacing */
     width: 100%; padding: 10px 15px; border-radius: 20px;
     border: 1px solid #555; font-family: 'Ubuntu'; font-size: 14px; background: transparent; color: var(--text-color); transition: box-shadow 0.3s, border-color 0.3s;
   }
@@ -249,50 +261,6 @@
     border-radius: 4px;
     cursor: pointer;
   }
-
-  /* New styles for favorites section and buttons */
-  #sidebar h2 {
-    font-size: 0.8em;
-    margin-bottom: 8px;
-  }
-
-  #favoritesList {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 0.75em;
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-  }
-
-  /* Truncate long favorite captions with ellipsis */
-  #favoritesList div span {
-    display: inline-block;
-    max-width: calc(100% - 24px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* Style for the minimalist favorite toggle button */
-  .favorite-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2em;
-    padding: 2px;
-    color: var(--primary-color);
-    transition: color 0.2s;
-    outline: none;
-  }
-
-  /* Hover effect for favorite button */
-  .favorite-btn:hover {
-    color: var(--blue-color);
-  }
 </style>
 </head>
 
@@ -304,21 +272,15 @@
 <!-- Main content -->
 <div id="mainContent">
 
-<!-- Light/Dark Mode Toggle -->
-<button id="mode-toggle" title="Toggle Light/Dark Mode">🌙</button>
+<!-- Side tab toggle button (further down on the left side) -->
+<button id="side-toggle" title="Toggle Light/Dark Mode">☀️</button>
 
-<!-- Sidebar: flex column, full height, with About at top -->
+<!-- Sidebar: fixed left side -->
 <div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
-  <!-- About Button now at the top -->
   <button id="aboutButton">About</button>
-  <!-- Search -->
   <input type="search" id="sidebar-search" placeholder="Search..." />
-  
-  <!-- Favorites Section -->
   <h2>Favorites</h2>
   <div id="favoritesList"></div>
-  
-  <!-- Categories with hidden display -->
   <div id="categoriesContainer" style="display: none;">
     <button class="category-btn" data-filter="All"><span>All</span></button>
     <button class="category-btn" data-filter="Water and Hygiene"><span>Water & Hygiene</span></button>
@@ -329,7 +291,7 @@
   </div>
 </div>
 
-<!-- Main Content -->
+<!-- Main content -->
 <div id="content">
   <h1 id="main-title" style="display:none;">ERGO INDEX</h1>
   <div id="figures"></div>
@@ -425,6 +387,11 @@ function removeFavorite(index) {
 function toggleFavorite(index) {
   const favIdx = favorites.indexOf(index);
   if (favIdx === -1) {
+    // Limit to 7 favorites
+    if (favorites.length >= 7) {
+      alert("You can only have up to 7 favorites.");
+      return;
+    }
     favorites.push(index);
   } else {
     favorites.splice(favIdx, 1);
@@ -507,18 +474,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load favorites from localStorage
   loadFavorites();
 
-  const modeToggle = document.getElementById('mode-toggle');
-  // Set initial theme
+  // Initialize theme and toggle button text
+  const sideToggle = document.getElementById('side-toggle');
   document.body.classList.add('dark-mode');
-  document.getElementById('mode-toggle').innerHTML = '🌙';
+  sideToggle.innerText = '☀️'; // initial icon for dark mode
 
-  // Theme toggle
-  modeToggle.onclick = () => {
+  // Toggle theme on side tab click
+  sideToggle.onclick = () => {
     document.body.classList.toggle('dark-mode');
     if (document.body.classList.contains('dark-mode')) {
-      modeToggle.innerHTML = '☀️';
+      sideToggle.innerText = '☀️'; // sun icon for light mode
     } else {
-      modeToggle.innerHTML = '🌙';
+      sideToggle.innerText = '🌙'; // moon icon for dark mode
     }
   };
 
