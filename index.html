@@ -47,6 +47,15 @@
     background: var(--bg-color);
     color: var(--text-color);
     display: flex; min-height: 100vh;
+    position: relative; /* For stacking context */
+  }
+
+  /* Globe background canvas styling */
+  #globeBackground {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; /* Behind all content */
+    opacity: 0.2; /* semi-transparent for background effect */
+    pointer-events: none; /* Allows clicks through */
   }
 
   #mainContent {
@@ -285,6 +294,9 @@
 
 <body>
 
+<!-- Globe background canvas -->
+<canvas id="globeBackground"></canvas>
+
 <!-- Main content -->
 <div id="mainContent">
 
@@ -328,6 +340,56 @@
 </div>
 
 </div> <!-- end mainContent -->
+
+<!-- Include Three.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
+<script>
+  // Initialize Three.js scene for background globe
+  let scene, camera, renderer, sphereMesh;
+
+  function initGlobe() {
+    const canvas = document.getElementById('globeBackground');
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera.position.z = 2;
+
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    const geometry = new THREE.SphereGeometry(0.9, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
+    sphereMesh = new THREE.Mesh(geometry, material);
+    scene.add(sphereMesh);
+
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    });
+
+    animate();
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    sphereMesh.rotation.y += 0.001; // slow rotation
+    renderer.render(scene, camera);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initGlobe();
+  });
+</script>
 
 <script>
 const figures = [
