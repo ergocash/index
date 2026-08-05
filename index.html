@@ -79,14 +79,16 @@
     position: fixed; top: 15px; right: 15px; font-size: 1.5em;
     background: transparent; border: none; cursor: pointer; z-index: 1100;
     color: var(--text-color);
-    transition: transform 0.2s;
   }
   #mode-toggle:hover {
     transform: scale(1.2);
   }
 
+  /* Updated search input style with increased bottom margin */
   #sidebar input[type="search"] {
-    margin-top: 15px; width: 100%; padding: 10px 15px; border-radius: 20px;
+    margin-top: 15px;
+    margin-bottom: 20px; /* Increased spacing here */
+    width: 100%; padding: 10px 15px; border-radius: 20px;
     border: 1px solid #555; font-family: 'Ubuntu'; font-size: 14px; background: transparent; color: var(--text-color); transition: box-shadow 0.3s, border-color 0.3s;
   }
   #sidebar input[type="search"]:focus {
@@ -247,6 +249,50 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  /* New styles for favorites section and buttons */
+  #sidebar h2 {
+    font-size: 0.8em;
+    margin-bottom: 8px;
+  }
+
+  #favoritesList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.75em;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
+  /* Truncate long favorite captions with ellipsis */
+  #favoritesList div span {
+    display: inline-block;
+    max-width: calc(100% - 24px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Style for the minimalist favorite toggle button */
+  .favorite-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 2px;
+    color: var(--primary-color);
+    transition: color 0.2s;
+    outline: none;
+  }
+
+  /* Hover effect for favorite button */
+  .favorite-btn:hover {
+    color: var(--blue-color);
+  }
 </style>
 </head>
 
@@ -338,7 +384,7 @@ function updateFavoritesList() {
   const favsContainer = document.getElementById('favoritesList');
   favsContainer.innerHTML = '';
   if (favorites.length === 0) {
-    favsContainer.innerHTML = '<p>No favorites yet.</p>';
+    favsContainer.innerHTML = '<p style="font-size:0.75em;">No favorites yet.</p>';
     return;
   }
   favorites.forEach(index => {
@@ -348,12 +394,21 @@ function updateFavoritesList() {
     favItem.style.alignItems = 'center'; 
     favItem.style.justifyContent = 'space-between'; 
     favItem.style.marginBottom = '8px';
+    favItem.style.position = 'relative';
 
     favItem.innerHTML = `
-      <span style="cursor:pointer;" onclick="window.open('${item.href}', '_blank')">${item.caption}</span>
-      <button style="background:none; border:none; cursor:pointer; font-size:1.2em;" onclick="removeFavorite(${index})">🗑️</button>
+      <span style="cursor:pointer; max-width: calc(100% - 24px); display:inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" onclick="window.open('${item.href}', '_blank')">${item.caption}</span>
+      <button style="background:none; border:none; cursor:pointer; font-size:1.2em; padding:2px; outline:none; color: var(--primary-color);" aria-label="${favorites.includes(index) ? 'Remove from favorites' : 'Add to favorites'}" data-index="${index}" class="favorite-btn">${favorites.includes(index) ? '★' : '☆'}</button>
     `;
     favsContainer.appendChild(favItem);
+  });
+  // Attach event listeners to favorite buttons
+  document.querySelectorAll('.favorite-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.dataset.index);
+      toggleFavorite(index);
+    };
   });
 }
 
@@ -390,7 +445,7 @@ function populateFigures() {
       figure.classList.toggle('show-stats');
     };
     const isFavorited = favorites.includes(index);
-    const favoriteIcon = `<button class="favorite-btn" data-index="${index}" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer; font-size:1.5em;">${isFavorited ? '💖' : '🤍'}</button>`;
+    const favoriteIcon = `<button class="favorite-btn" aria-label="${isFavorited ? 'Remove from favorites' : 'Add to favorites'}" data-index="${index}" style="position:absolute; top:8px; right:8px; background:none; border:none; cursor:pointer; font-size:1.2em; padding:2px; transition: color 0.2s; outline:none; color: var(--primary-color);">${isFavorited ? '★' : '☆'}</button>`;
     let figureHTML = `
       ${favoriteIcon}
       <a href="${item.href}" target="_blank" rel="noopener noreferrer">
