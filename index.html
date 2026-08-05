@@ -298,7 +298,7 @@
 <canvas id="globeBackground"></canvas>
 
 <!-- Main content -->
-<div id="mainContent">
+<div id="mainContent" style="display:none;"> <!-- Hidden immediately on load -->
 
 <!-- Side toggle tab further down -->
 <button id="side-toggle" title="Toggle Light/Dark Mode">☀️</button>
@@ -553,18 +553,24 @@ backBtn.classList.add('hidden');
 let hideTimeout = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Show main content after styles are applied
+  // This is now empty, but kept if needed.
+});
+</script>
+
+<script>
+window.onload = () => {
+  // Show main content after all resources are loaded
   document.getElementById('mainContent').style.display = 'block';
 
-  // Load favorites from localStorage
-  loadFavorites();
-
-  // Initialize theme and toggle button text
+  // Initialize theme toggle
   const sideToggle = document.getElementById('side-toggle');
   document.body.classList.add('dark-mode');
   sideToggle.innerText = '☀️'; // initial icon for dark mode
 
-  // Toggle theme on side tab click
+  // Load favorites from localStorage
+  loadFavorites();
+
+  // Theme toggle button
   sideToggle.onclick = () => {
     document.body.classList.toggle('dark-mode');
     if (document.body.classList.contains('dark-mode')) {
@@ -623,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
       aboutModal.style.display = 'none';
     }
   });
-});
+};
 </script>
 </body>
 </html>
