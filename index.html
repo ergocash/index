@@ -140,7 +140,7 @@
     margin-left: 160px; padding: 30px 20px; flex: 1;
     transition: margin-left 0.3s;
   }
-  @media (max-width: 768px) {
+  @media(max-width: 768px) {
     #sidebar {
       width: 140px;
       padding: 15px 10px;
@@ -261,6 +261,22 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  /* Additional CSS for truncating favorites list text properly on mobile */
+  #favoritesList div span {
+    display: inline-block;
+    max-width: calc(100% - 40px); /* leave space for star button */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media(max-width: 768px) {
+    #favoritesList div span {
+      max-width: calc(100% - 40px);
+      font-size: 0.75em; /* Smaller font for mobile */
+    }
+  }
 </style>
 </head>
 
@@ -272,10 +288,10 @@
 <!-- Main content -->
 <div id="mainContent">
 
-<!-- Side tab toggle button (further down on the left side) -->
+<!-- Side toggle tab further down -->
 <button id="side-toggle" title="Toggle Light/Dark Mode">☀️</button>
 
-<!-- Sidebar: fixed left side -->
+<!-- Sidebar -->
 <div id="sidebar" style="display: flex; flex-direction: column; height: 100%;">
   <button id="aboutButton">About</button>
   <input type="search" id="sidebar-search" placeholder="Search..." />
@@ -510,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.onclick = () => { filterFigures('category', btn.dataset.filter); };
   });
 
-  // Back to Top button visibility
+  // Back to Top button
   window.addEventListener('scroll', () => {
     backBtn.classList.remove('hidden');
     if (hideTimeout) clearTimeout(hideTimeout);
@@ -522,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // About Button modal
+  // About modal
   const aboutBtn = document.getElementById('aboutButton');
   const aboutModal = document.getElementById('aboutModal');
   const closeBtn = document.getElementById('closeAbout');
